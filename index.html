@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>L'Élixir Perfumaria</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-50 text-gray-800 font-sans">
+
+    <header class="bg-white shadow-sm sticky top-0 z-50">
+        <div class="max-w-6xl mx-auto px-4 py-4 flex justify-between items-center">
+            <h1 class="text-2xl font-serif font-bold tracking-widest text-purple-900">L'ÉLIXIR</h1>
+            <div class="relative">
+                <button class="flex items-center text-gray-700 hover:text-purple-900">
+                    <span class="mr-1 font-medium">Carrinho</span>
+                    <span id="cart-count" class="bg-purple-600 text-white text-xs rounded-full h-5 w-5 flex items-center justify-center">0</span>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <main class="max-w-6xl mx-auto px-4 py-8 md:py-12 grid grid-cols-1 md:grid-cols-2 gap-8 items-center">
+        
+        <div class="flex justify-center bg-white p-6 rounded-2xl shadow-sm">
+            <img src="https://images.unsplash.com/photo-1541643600914-78b084683601?auto=format&fit=crop&w=600&q=80" 
+                 alt="Perfume L'Élixir" 
+                 class="rounded-xl max-w-full h-auto object-cover max-h-[400px]">
+        </div>
+
+        <div class="space-y-6">
+            <div>
+                <span class="text-sm uppercase tracking-widest text-purple-600 font-semibold">Eau de Parfum</span>
+                <h2 class="text-3xl md:text-4xl font-serif font-bold mt-1 text-gray-900">Nuit Étoilée</h2>
+                <p class="text-gray-500 mt-2">Uma fragrância marcante com notas de baunilha, sândalo e jasmin. Perfeito para noites inesquecíveis.</p>
+            </div>
+
+            <div class="border-t border-b border-gray-100 py-4">
+                <div class="flex items-baseline space-x-2">
+                    <span class="text-3xl font-bold text-gray-900">R$ 289,90</span>
+                    <span class="text-sm text-gray-400 line-through">R$ 399,90</span>
+                </div>
+                <p class="text-sm text-green-600 font-medium mt-1">Disponível em estoque - Envio imediato</p>
+            </div>
+
+            <button id="btn-open-checkout" class="w-full bg-purple-950 hover:bg-purple-900 text-white font-medium py-4 rounded-xl transition duration-300 shadow-lg shadow-purple-950/20">
+                Comprar Agora
+            </button>
+        </div>
+    </main>
+
+    <div id="checkout-modal" class="fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4 hidden">
+        <div class="bg-white rounded-2xl w-full max-w-md p-6 max-h-[90vh] overflow-y-auto shadow-2xl relative">
+            <button id="btn-close-checkout" class="absolute top-4 right-4 text-gray-400 hover:text-gray-600 text-xl">&times;</button>
+            
+            <h3 class="text-xl font-bold mb-4 text-gray-900">Finalizar Compra</h3>
+            
+            <div class="flex border-b border-gray-200 mb-6">
+                <button id="tab-pix" class="w-1/2 pb-3 font-medium text-purple-600 border-b-2 border-purple-600 transition">Pix</button>
+                <button id="tab-card" class="w-1/2 pb-3 font-medium text-gray-400 border-b-2 border-transparent hover:text-gray-600 transition">Cartão de Crédito</button>
+            </div>
+
+            <div id="payment-pix" class="space-y-4">
+                <p class="text-sm text-gray-600">Pague via Pix e tenha aprovação instantânea. Geramos um QR Code fictício para você:</p>
+                <div class="bg-gray-100 p-4 rounded-xl flex flex-col items-center justify-center border-2 border-dashed border-gray-200">
+                    <div class="w-40 h-40 bg-purple-900 flex items-center justify-center rounded-lg shadow-inner">
+                        <span class="text-white text-xs font-mono text-center p-2">QR CODE SIMULADO</span>
+                    </div>
+                    <p class="text-xs text-gray-400 mt-2">Chave Pix: l-elixir@pagamentos.com</p>
+                </div>
+                <button onclick="finalizarCompra('Pix')" class="w-full bg-emerald-600 hover:bg-emerald-700 text-white font-medium py-3 rounded-xl transition">
+                    Confirmar Pagamento Pix
+                </button>
+            </div>
+
+            <form id="payment-card" class="space-y-4 hidden" onsubmit="event.preventDefault(); finalizarCompra('Cartão de Crédito');">
+                <div>
+                    <label class="block text-xs font-semibold text-gray-600 uppercase mb-1">Número do Cartão</label>
+                    <input type="text" placeholder="0000 0000 0000 0000" required class="w-full border border-gray-300 rounded-lg p-2.5 text-sm focus:ring-2 focus:ring-purple-500 focus:outline-none">
+                </div>
+                <div>
+                    <label class="block text-xs font-semibold text-gray-600 uppercase mb-1">Nome no Cartão</label>
+                    <input type="text" placeholder="JOÃO S SILVA" required class="w-full border border-gray-300 rounded-lg p-2.5 text-sm focus:ring-2 focus:ring-purple-500 focus:outline-none">
+                </div>
+                <div class="grid grid-cols-2 gap-4">
+                    <div>
+                        <label class="block text-xs font-semibold text-gray-600 uppercase mb-1">Validade</label>
+                        <input type="text" placeholder="MM/AA" required class="w-full border border-gray-300 rounded-lg p-2.5 text-sm focus:ring-2 focus:ring-purple-500 focus:outline-none">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-semibold text-gray-600 uppercase mb-1">CVV</label>
+                        <input type="text" placeholder="123" required class="w-full border border-gray-300 rounded-lg p-2.5 text-sm focus:ring-2 focus:ring-purple-500 focus:outline-none">
+                    </div>
+                </div>
+                <button type="submit" class="w-full bg-purple-950 hover:bg-purple-900 text-white font-medium py-3 rounded-xl transition mt-2">
+                    Pagar R$ 289,90
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        // Elementos da Interface
+        const modal = document.getElementById('checkout-modal');
+        const btnOpen = document.getElementById('btn-open-checkout');
+        const btnClose = document.getElementById('btn-close-checkout');
+        const cartCount = document.getElementById('cart-count');
+
+        const tabPix = document.getElementById('tab-pix');
+        const tabCard = document.getElementById('tab-card');
+        const paymentPix = document.getElementById('payment-pix');
+        const paymentCard = document.getElementById('payment-card');
+
+        // Controladores do Modal
+        btnOpen.addEventListener('click', () => {
+            modal.classList.remove('hidden');
+            cartCount.innerText = "1"; // Atualiza o carrinho visualmente
+        });
+
+        btnClose.addEventListener('click', () => {
+            modal.classList.add('hidden');
+        });
+
+        // Alternar abas de pagamento (Pix / Cartão)
+        tabPix.addEventListener('click', () => {
+            tabPix.className = "w-1/2 pb-3 font-medium text-purple-600 border-b-2 border-purple-600 transition";
+            tabCard.className = "w-1/2 pb-3 font-medium text-gray-400 border-b-2 border-transparent hover:text-gray-600 transition";
+            paymentPix.classList.remove('hidden');
+            paymentCard.classList.add('hidden');
+        });
+
+        tabCard.addEventListener('click', () => {
+            tabCard.className = "w-1/2 pb-3 font-medium text-purple-600 border-b-2 border-purple-600 transition";
+            tabPix.className = "w-1/2 pb-3 font-medium text-gray-400 border-b-2 border-transparent hover:text-gray-600 transition";
+            paymentCard.classList.remove('hidden');
+            paymentPix.classList.add('hidden');
+        });
+
+        // Simulação de Finalização
+        function finalizarCompra(metodo) {
+            alert(`Sucesso! Sua compra via ${metodo} foi simulada com êxito. Obrigado por escolher a L'Élixir!`);
+            modal.classList.add('hidden');
+            cartCount.innerText = "0";
+        }
+    </script>
+</body>
+</html>
